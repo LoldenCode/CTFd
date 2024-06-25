@@ -6,7 +6,7 @@ services:
     user: root
     restart: always
     ports:
-      - "4300:8000"
+      - 8500:8000
     environment:
       - UPLOAD_FOLDER=/var/uploads
       - DATABASE_URL=mysql+pymysql://ctfd:ctfd@db/ctfd
@@ -16,7 +16,6 @@ services:
       - ACCESS_LOG=-
       - ERROR_LOG=-
       - REVERSE_PROXY=true
-      - SECRET_KEY=abcdefghijklmnop
     volumes:
       - .data/CTFd/logs:/var/log/CTFd
       - .data/CTFd/uploads:/var/uploads
@@ -25,11 +24,10 @@ services:
       - db
     networks:
       - porty_default
-      - internal
     labels:
       - traefik.enable=true
-      - traefik.http.routers.ctfd.rule=Host(`ctfd.lolden.xyz`)
       - traefik.http.routers.ctfd.entryPoints=https
+      - traefik.http.routers.ctfd.rule=Host(`ctfd.lolden.xyz`)
 
   nginx:
     image: nginx:stable
@@ -37,7 +35,7 @@ services:
     volumes:
       - ./conf/nginx/http.conf:/etc/nginx/nginx.conf
     ports:
-      - 6980:80
+      - 8190:80
     depends_on:
       - ctfd
 
@@ -53,7 +51,7 @@ services:
     volumes:
       - .data/mysql:/var/lib/mysql
     networks:
-        internal:
+      - porty_default
     # This command is required to set important mariadb defaults
     command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
 
@@ -63,12 +61,9 @@ services:
     volumes:
     - .data/redis:/data
     networks:
-        internal:
+      - porty_default
 
 networks:
-  default:
-  internal:
-    internal: true
   porty_default:
     name: porty_default
     external: true
