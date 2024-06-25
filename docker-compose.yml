@@ -38,6 +38,8 @@ services:
       - 8190:80
     depends_on:
       - ctfd
+    networks:
+      - porty_default
 
   db:
     image: mariadb:10.11
