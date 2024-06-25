@@ -24,10 +24,6 @@ services:
       - db
     networks:
       - porty_default
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.ctfd.entryPoints=https
-      - traefik.http.routers.ctfd.rule=Host(`ctfd.lolden.xyz`)
 
   nginx:
     image: nginx:stable
@@ -40,6 +36,10 @@ services:
       - ctfd
     networks:
       - porty_default
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ctfd.entryPoints=https
+      - traefik.http.routers.ctfd.rule=Host(`ctfd.lolden.xyz`)
 
   db:
     image: mariadb:10.11
