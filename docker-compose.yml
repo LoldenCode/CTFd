@@ -23,7 +23,7 @@ services:
     depends_on:
       - db
     networks:
-      - porty_default
+      - ctfd
 
   nginx:
     image: nginx:stable
@@ -35,7 +35,7 @@ services:
     depends_on:
       - ctfd
     networks:
-      - porty_default
+      - ctfd
     labels:
       - traefik.enable=true
       - traefik.http.routers.ctfd.entryPoints=https
@@ -53,7 +53,7 @@ services:
     volumes:
       - .data/mysql:/var/lib/mysql
     networks:
-      - porty_default
+      - ctfd
     # This command is required to set important mariadb defaults
     command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
 
@@ -63,9 +63,9 @@ services:
     volumes:
     - .data/redis:/data
     networks:
-      - porty_default
+      - ctfd
 
 networks:
-  porty_default:
-    name: porty_default
-    external: true
+  ctfd:
+    name: ctfd
+    external: false
